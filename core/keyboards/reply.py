@@ -1,7 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, KeyboardButtonPollType
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
-
-# from core.handlers.basic import get_name
 
 
 def get_reply_keyboard():

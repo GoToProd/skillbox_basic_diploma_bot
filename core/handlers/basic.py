@@ -1,6 +1,6 @@
-import os
 import ssl
 import certifi
+from core.config import ADMIN_ID
 from aiogram import Bot
 from aiogram.types import Message
 import aiohttp
@@ -14,36 +14,35 @@ from aiogram.fsm.context import FSMContext
 from core.utils.statesform import StepsForm
 from core.utils.check_language import is_russian_word
 
-from core.utils.models import User
-from core.utils.db_commands import (
+from core.database.models import User
+from core.database.db_commands import (
     add_user,
     add_request,
     get_user_by_username,
     get_user_requests,
 )
 
-# from core.utils.dbconnect import Request
-from dotenv import load_dotenv
-
-load_dotenv()
-ADMIN_ID = os.getenv("ADMIN_ID")
-
 
 async def get_start(message: Message, bot: Bot):
     user = User.get_or_none(User.user_name == message.from_user.username)
-    # user = await get_user_by_username(message.from_user.username)
     if not user:
         user = await add_user(message.from_user.username, message.from_user.first_name)
+        await bot.send_message(
+            ADMIN_ID,
+            f"Новый пользователь - {message.from_user.first_name}, tg://user?id={message.from_user.id}",
+        )
+        await add_request(user, "/start")
+        async with ChatActionSender.typing(bot=bot, chat_id=message.from_user.id):
+            await asyncio.sleep(1)
+            await message.answer(
+                f"Здравствуйте, уважаемый <b>{message.from_user.first_name.title()}</b>. \nРад вас видеть в моем учебном боте!",
+                reply_markup=get_reply_keyboard(),
+            )
     await add_request(user, "/start")
-
-    await bot.send_message(
-        ADMIN_ID,
-        f"Новый пользователь - {message.from_user.first_name}, {message.from_user.id}",
-    )
     async with ChatActionSender.typing(bot=bot, chat_id=message.from_user.id):
         await asyncio.sleep(1)
         await message.answer(
-            f"Здравствуйте, уважаемый <b>{message.from_user.first_name.title()}</b>. \nРад вас видеть в моем учебном боте!",
+            f"Вы уже нажали start! Уважаемый <b>{message.from_user.first_name.title()}</b>, хватит!. \n Но, я снова рад вас видеть в моем учебном боте!",
             reply_markup=get_reply_keyboard(),
         )
 

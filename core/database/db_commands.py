@@ -1,5 +1,5 @@
 import asyncio
-from core.utils.models import User, Request
+from core.database.models import User, Request
 
 
 async def add_user(user_name: str, first_name: str):

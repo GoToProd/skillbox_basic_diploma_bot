@@ -1,11 +1,6 @@
-import os
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from core.utils.callbackdata import MacInfo
-from dotenv import load_dotenv
-
-load_dotenv()
-ADMIN_ID = os.getenv("ADMIN_ID")
+from core.config import ADMIN_ID
 
 
 def get_inline_keyboard():

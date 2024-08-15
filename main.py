@@ -1,7 +1,6 @@
-import os
 import asyncio
 import logging
-from dotenv.main import load_dotenv
+from core.config import ADMIN_ID, BOT_TOKEN
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message
 from aiogram.client.bot import DefaultBotProperties
@@ -25,12 +24,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler_di import ContextSchedulerDecorator
 from aiogram.fsm.storage.redis import RedisStorage
 from apscheduler.jobstores.redis import RedisJobStore
-
-
-load_dotenv()
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = os.getenv("ADMIN_ID")
 
 
 async def start_bot(bot: Bot):
